@@ -1,9 +1,58 @@
-const {filter} = require('../app');
 
-describe('filter test', () => {
-    it('should show the animals matching with the ry string pattern', () => {
-        const result = filter('ry');
+const {filter} = require('../logic');
 
-        expect(result).toEqual('[{"name":"Uzuzozne","people":[{"name":"Lillie Abbott","animals":[{"name":"John Dory"}]}]},{"name":"Satanwi","people":[{"name":"Anthony Bruno","animals":[{"name":"Oryx"}]}]}]');
+describe('filter', () => {
+
+    test('ry should return John Dory and Oryx', () => {
+        expect(filter('ry')).toMatchObject([
+            {
+            name: 'Uzuzozne',
+            people: [
+                {
+                name: 'Lillie Abbott',
+                animals: [
+                    {
+                    name: 'John Dory'
+                    }
+                ]
+                }
+            ]
+            },  
+            {
+            name: 'Satanwi',
+            people: [
+                {
+                name: 'Anthony Bruno',
+                animals: [
+                    {
+                    name: 'Oryx'
+                    }
+                ]
+                }
+            ]
+            }
+        ]);
+    });
+
+    test('should return an empty array if no match found', () => {
+        expect(filter('SHOULD NOT MATCH')).toMatchObject([]);
+    });
+
+    const dataSet = [
+        [],
+        {},
+        1,
+        "",
+        null,
+        undefined,
+        NaN,
+        true,
+        false,
+        () => {},
+    ];
+
+
+    test.each(dataSet)('%p should throw an error', (data) => {
+        expect(() => filter(data)).toThrow();
     });
 });
